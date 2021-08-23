@@ -9,12 +9,22 @@ import UIKit
 
 class LocationListViewController: UITableViewController {
 
-    @IBAction func addButtonPressed(_ sender: Any) {
+    enum Segues {
+        static let modallyToLocationMaintenanceAdd = "modallyToLocationMaintenanceAdd"
+        static let modallyToLocationMaintenanceModify = "modallyToLocationMaintenanceModify"
+        static let showToLocationDetail = "showToLocationDetail"
+    }
+
+    @IBOutlet var editButton: UIBarButtonItem!
+    @IBAction func editButtonPressed(_ sender: Any) {
         
-        let newLocation = Location("Location \(Location.data.count)", 32.7546, -117.1497)
-        
-        Location.data.append(newLocation)
-        tableView.reloadData()
+        if tableView.isEditing {
+            tableView.setEditing(false, animated: true)
+            editButton.title = "Edit"
+        } else {
+            tableView.setEditing(true, animated: true)
+            editButton.title = "Done"
+        }
     }
 }
 
@@ -36,36 +46,54 @@ extension LocationListViewController {
         return cell
         }
 
-    // Segue to Location detail
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        let locationListToLocationDetailIdentifier = "LocationListToLocationDetail"
-        let addLocationSegue = "AddLocationSegue"
-
-        if segue.identifier == locationListToLocationDetailIdentifier,
+        if segue.identifier == Segues.showToLocationDetail,
            let locationDetailViewController = segue.destination as? LocationDetailViewController,
            let index = tableView.indexPathForSelectedRow?.row {
             locationDetailViewController.location = Location.data[index]
             return
         }
         
-        if segue.identifier == addLocationSegue,
+        if segue.identifier == Segues.modallyToLocationMaintenanceAdd,
            let locationMaintenaceViewController = segue.destination as? LocationMaintenanceViewController {
             locationMaintenaceViewController.location = nil
             return
         }
 
+        if segue.identifier == Segues.modallyToLocationMaintenanceModify,
+           let locationMaintenaceViewController = segue.destination as? LocationMaintenanceViewController, let index = tableView.indexPathForSelectedRow?.row {
+            locationMaintenaceViewController.location = Location.data[index]
+            return
+        }
+
     }
 
-    @IBAction func cancelCreateEditLocation(unwindSegue: UIStoryboardSegue) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+        if tableView.isEditing {
+            performSegue(withIdentifier: Segues.modallyToLocationMaintenanceModify, sender: nil)
+        } else {
+            performSegue(withIdentifier: Segues.showToLocationDetail, sender: nil)
+        }
+    }
+    
+    @IBAction func cancelLocationMaintenace(unwindSegue: UIStoryboardSegue) {
         
     }
 
-    @IBAction func doneCreateEditLocation(unwindSegue: UIStoryboardSegue) {
+    @IBAction func doneLocationMaintenance(unwindSegue: UIStoryboardSegue) {
         
         let newLocation = Location("Location \(Location.data.count)", 32.7546, -117.1497)
         Location.data.append(newLocation)
         tableView.reloadData()
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            Location.data.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+
     }
 }

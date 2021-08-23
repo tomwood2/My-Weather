@@ -14,6 +14,11 @@ class LocationDetailViewController: UITableViewController {
 }
 
 extension LocationDetailViewController {
+    
+    enum Segues {
+        static let showToObservationDetail = "showToObservationDetail"
+    }
+    
     static let locationDetailListCell = "LocationDetailListCell"
 
     override func viewWillAppear(_ animated: Bool) {
@@ -81,10 +86,7 @@ extension LocationDetailViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
-        let locationDetailToObservationDetail = "LocationDetailToObservationDetail"
-        let editLocationSegue = "EditLocationSegue"
-
-        if segue.identifier == locationDetailToObservationDetail,
+        if segue.identifier == Segues.showToObservationDetail,
            let viewController = segue.destination as? ObservationDetailListViewController,
            let index = tableView.indexPathForSelectedRow?.row {
             
@@ -93,33 +95,5 @@ extension LocationDetailViewController {
             }
             return
         }
-
-        if segue.identifier == editLocationSegue,
-           let locationMaintenaceViewController = segue.destination as? LocationMaintenanceViewController,
-           let location = location {
-            locationMaintenaceViewController.location = location
-            return
-        }
     }
-    
-    @IBAction func doneEditLocation(unwindSegue: UIStoryboardSegue) {
-
-        // update the appropriate location in our array
-        // with the values from the maintenance view
-        
-//        let newLocation = Location("Location \(Location.data.count)", 32.7546, -117.1497)
-//        Location.data.append(newLocation)
-        tableView.reloadData()
-    }
-
-    @IBAction func cancelEditLocation(unwindSegue: UIStoryboardSegue) {
-
-        // update the appropriate location in our array
-        // with the values from the maintenance view
-        
-//        let newLocation = Location("Location \(Location.data.count)", 32.7546, -117.1497)
-//        Location.data.append(newLocation)
-//        tableView.reloadData()
-    }
-
 }

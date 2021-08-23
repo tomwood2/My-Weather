@@ -14,13 +14,14 @@ struct HTTPURLRequestor {
             return
         }
         let session : URLSession = URLSession(configuration: .ephemeral)
+        session.configuration.waitsForConnectivity = true
         let dataTask = session.dataTask(with: url) { data, response, error in
             if let error = error {
                 DispatchQueue.main.async {
                     onError("DataTask error: " + error.localizedDescription)
                 }
             } else {
-                if let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 {
+                if let data = data, let response = response as? HTTPURLResponse {
                 
 //                    print("response.allHeaderFields: \(response.allHeaderFields)")
 //
@@ -28,9 +29,31 @@ struct HTTPURLRequestor {
 //                        print("body: \(body)")
 //                    }
 
-                    DispatchQueue.main.async {
-                        onCompletion(data)
+                    if response.statusCode == 200 {
+                        DispatchQueue.main.async {
+                            onCompletion(data)
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            var error = ""
+                            
+                            if let body = String(data: data, encoding: .utf8) {
+                                error = body    // usually json that looks like this:
+/*                                body: {
+                                    "correlationId": "1e3303e3",
+                                    "title": "Not Found",
+                                    "type": "https://api.weather.gov/problems/NotFound",
+                                    "status": 404,
+                                    "detail": "Not Found",
+                                    "instance": "https://api.weather.gov/requests/1e3303e3"
+                                } */
+                            } else {
+                                error = "response code = \(response.statusCode)"
+                            }
+                            onError(error)
+                        }
                     }
+                    
                 }
             }
         }
