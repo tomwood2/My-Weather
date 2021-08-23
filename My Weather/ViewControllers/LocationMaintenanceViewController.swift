@@ -8,7 +8,7 @@
 import UIKit
 
 class LocationMaintenanceViewController : UIViewController {
-    var location: Location?
+    var locationIndex: Int?
     var newLocation: Location?
     @IBOutlet var navigationBarTitle: UINavigationItem!
     @IBOutlet var rightNavigationBarButton: UIBarButtonItem!
@@ -16,42 +16,72 @@ class LocationMaintenanceViewController : UIViewController {
     @IBOutlet var longitudeTextField: UITextField!
     @IBOutlet var latitudeTextField: UITextField!
     @IBOutlet var errorMessageLabel: UILabel!
-//    @IBAction func doneButtonClicked(_ sender: Any) {
-//        if location == nil {
-//            self.performSegue(withIdentifier: "AddLocationMaintenanceDone", sender: self)
-//        } else {
-//            self.performSegue(withIdentifier: "EditLocationMaintenanceDone", sender: self)
-//        }
-//    }
-//    @IBAction func cancelButtonClicked(_ sender: Any) {
-//        if location == nil {
-//            self.performSegue(withIdentifier: "AddLocationMaintenanceCancel", sender: self)
-//        } else {
-//            
-//            if updateNewLocation() {
-//            
-//            self.performSegue(withIdentifier: "EditLocationMaintenanceCancel", sender: self)
-//            }
-//        }
-//    }
 }
 
 extension LocationMaintenanceViewController {
+    
+    enum ErrorMessages {
+        static let nameMissing = "Name must be specified"
+        static let longitudeMissing = "Longitude must be specified"
+        static let latitudeMissing = "Latitude must be specified"
+
+        static let longitudeNotANumber = "Longitude must be a number"
+        static let latitudeNotANumber = "Latitude must be a number"
+
+        static let longitudeOutOfRange = "Longitude must be between -180 and 180"
+        static let latitudeOutOfRange = "Latitude must be  between -90 and 90"
+    }
+    
 
     func updateNewLocation() -> Bool {
+
+        // Name
+
         guard let name = nameTextField.text else {
+            self.errorMessageLabel.text = ErrorMessages.nameMissing
             return false
         }
         
-        guard let longitude = Double(longitudeTextField.text!) else {
-            return false
-        }
-        
-        guard let latitude = Double(latitudeTextField.text!) else {
+        if name.count < 1 {
+            self.errorMessageLabel.text = ErrorMessages.nameMissing
             return false
         }
 
-        newLocation = Location(name, longitude, latitude)
+        // Longitude
+        
+        guard let longitude = longitudeTextField.text else {
+            self.errorMessageLabel.text = ErrorMessages.longitudeMissing
+            return false
+        }
+        
+        guard let longitudeDouble = Double(longitude) else {
+            self.errorMessageLabel.text = ErrorMessages.longitudeNotANumber
+            return false
+        }
+
+        if longitudeDouble < -180.0 || longitudeDouble > 180.0 {
+            self.errorMessageLabel.text = ErrorMessages.longitudeOutOfRange
+            return false
+        }
+        
+        // Latiitude
+
+        guard let latitude = latitudeTextField.text else {
+            self.errorMessageLabel.text = ErrorMessages.latitudeMissing
+            return false
+        }
+        
+        guard let latitudeDouble = Double(latitude) else {
+            self.errorMessageLabel.text = ErrorMessages.latitudeNotANumber
+            return false
+        }
+
+        if latitudeDouble < -90.0 || latitudeDouble > 90.0 {
+            self.errorMessageLabel.text = ErrorMessages.longitudeOutOfRange
+            return false
+        }
+        
+        newLocation = Location(name, latitudeDouble, longitudeDouble)
         return true
     }
 
@@ -66,10 +96,13 @@ extension LocationMaintenanceViewController {
         // for Edit.  In its prepare for seque set the location
         // from the selected item
         
-        if let location = location {
+        if let locationIndex = locationIndex {
+
+            let location = Location.data[locationIndex]
+            
             navigationBarTitle.title = location.name
             rightNavigationBarButton.title = "Done"
-            
+
             self.nameTextField.text = location.name
             self.longitudeTextField.text = String(location.longitude)
             self.latitudeTextField.text = String(location.latitude)
@@ -78,5 +111,23 @@ extension LocationMaintenanceViewController {
             navigationBarTitle.title = "Add Location"
             rightNavigationBarButton.title = "Add"
         }
+    }
+
+    enum Segues {
+        static let cancelLocationMaintenace = "cancelLocationMaintenace"
+        static let doneLocationMaintenance = "doneLocationMaintenance"
+    }
+    
+    override func shouldPerformSegue(withIdentifier identifier: String?, sender: Any?) -> Bool {
+        
+        if let identifier = identifier {
+            if identifier == Segues.doneLocationMaintenance {
+                if !updateNewLocation() {
+                    return false
+                }
+            }
+        }
+        
+        return true
     }
 }

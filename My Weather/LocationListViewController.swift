@@ -57,13 +57,13 @@ extension LocationListViewController {
         
         if segue.identifier == Segues.modallyToLocationMaintenanceAdd,
            let locationMaintenaceViewController = segue.destination as? LocationMaintenanceViewController {
-            locationMaintenaceViewController.location = nil
+            locationMaintenaceViewController.locationIndex = nil
             return
         }
 
         if segue.identifier == Segues.modallyToLocationMaintenanceModify,
            let locationMaintenaceViewController = segue.destination as? LocationMaintenanceViewController, let index = tableView.indexPathForSelectedRow?.row {
-            locationMaintenaceViewController.location = Location.data[index]
+            locationMaintenaceViewController.locationIndex = index
             return
         }
 
@@ -84,8 +84,15 @@ extension LocationListViewController {
 
     @IBAction func doneLocationMaintenance(unwindSegue: UIStoryboardSegue) {
         
-        let newLocation = Location("Location \(Location.data.count)", 32.7546, -117.1497)
-        Location.data.append(newLocation)
+        if let viewController = unwindSegue.source as? LocationMaintenanceViewController, let newLocation = viewController.newLocation {
+            
+            if let locationIndex = viewController.locationIndex {
+                Location.data[locationIndex] = newLocation
+            } else {
+                Location.data.append(newLocation)
+            }
+        }
+
         tableView.reloadData()
     }
     
