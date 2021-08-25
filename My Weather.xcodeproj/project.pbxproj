@@ -17,6 +17,7 @@
 		722563C026C614E500710098 /* My_WeatherUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 722563BF26C614E500710098 /* My_WeatherUITests.swift */; };
 		722563CF26C6196E00710098 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 722563CE26C6196E00710098 /* Location.swift */; };
 		722563D226C6254900710098 /* LocationListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 722563D126C6254900710098 /* LocationListCell.swift */; };
+		7229226026D4312400B5739F /* LocationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7229225F26D4312400B5739F /* LocationData.swift */; };
 		729BEEB126C7053100380F78 /* LocationDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729BEEB026C7053100380F78 /* LocationDetailViewController.swift */; };
 		729BEEB326C7267700380F78 /* LocationDetailListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729BEEB226C7267600380F78 /* LocationDetailListCell.swift */; };
 		729BEEB626C7317F00380F78 /* NWSPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 729BEEB526C7317F00380F78 /* NWSPoint.swift */; };
@@ -64,6 +65,7 @@
 		722563C126C614E500710098 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		722563CE26C6196E00710098 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		722563D126C6254900710098 /* LocationListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationListCell.swift; sourceTree = "<group>"; };
+		7229225F26D4312400B5739F /* LocationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationData.swift; sourceTree = "<group>"; };
 		729BEEB026C7053100380F78 /* LocationDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailViewController.swift; sourceTree = "<group>"; };
 		729BEEB226C7267600380F78 /* LocationDetailListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailListCell.swift; sourceTree = "<group>"; };
 		729BEEB526C7317F00380F78 /* NWSPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NWSPoint.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				722563CE26C6196E00710098 /* Location.swift */,
+				7229225F26D4312400B5739F /* LocationData.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -338,6 +341,7 @@
 				722563D226C6254900710098 /* LocationListCell.swift in Sources */,
 				729BEEB626C7317F00380F78 /* NWSPoint.swift in Sources */,
 				729BEEB826C732A600380F78 /* HTTPURLRequestor.swift in Sources */,
+				7229226026D4312400B5739F /* LocationData.swift in Sources */,
 				7225639E26C614E400710098 /* AppDelegate.swift in Sources */,
 				722563CF26C6196E00710098 /* Location.swift in Sources */,
 				729BEEBE26C760B500380F78 /* ObservationDetailListCell.swift in Sources */,

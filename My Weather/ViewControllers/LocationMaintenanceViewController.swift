@@ -6,10 +6,12 @@
 //
 
 import UIKit
+import SwiftUI
 
 class LocationMaintenanceViewController : UIViewController {
     var locationIndex: Int?
-    var newLocation: Location?
+    var locationData = Location.Data()
+
     @IBOutlet var navigationBarTitle: UINavigationItem!
     @IBOutlet var rightNavigationBarButton: UIBarButtonItem!
     @IBOutlet var nameTextField: UITextField!
@@ -80,8 +82,11 @@ extension LocationMaintenanceViewController {
             self.errorMessageLabel.text = ErrorMessages.longitudeOutOfRange
             return false
         }
+ 
+        locationData.name = name
+        locationData.latitude = latitudeDouble
+        locationData.longitude = longitudeDouble
         
-        newLocation = Location(name, latitudeDouble, longitudeDouble)
         return true
     }
 
@@ -96,16 +101,13 @@ extension LocationMaintenanceViewController {
         // for Edit.  In its prepare for seque set the location
         // from the selected item
         
-        if let locationIndex = locationIndex {
-
-            let location = Location.data[locationIndex]
-            
-            navigationBarTitle.title = location.name
+        if locationIndex != nil {
+            navigationBarTitle.title = locationData.name
             rightNavigationBarButton.title = "Done"
 
-            self.nameTextField.text = location.name
-            self.longitudeTextField.text = String(location.longitude)
-            self.latitudeTextField.text = String(location.latitude)
+            nameTextField.text = locationData.name
+            longitudeTextField.text = String(locationData.longitude)
+            latitudeTextField.text = String(locationData.latitude)
             
         } else {
             navigationBarTitle.title = "Add Location"
